@@ -1,0 +1,7 @@
+name: ggplot
+channels:
+  - conda-forge 
+dependencies:
+  - r-ggally
+  - r-rcolorbrewer
+  - dplyr

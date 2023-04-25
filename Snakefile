@@ -22,8 +22,8 @@ rule pbmm2:
     params:
         sort_threads = 2,
         alignment_threads = 6
-    container:
-        "docker://xiaoyuz/biotools:latest"
+    # container:
+    #     "docker://xiaoyuz/biotools:latest"
     shell:
         "pbmm2 align {input.ref} {input.bam} {output.bam} --preset CCS --sort -j {params.alignment_threads} -J {params.sort_threads}"
 
@@ -39,8 +39,8 @@ rule pbCpGtools:
         model = "/pb-CpG-tools-v2.2.0-x86_64-unknown-linux-gnu/models/pileup_calling_model.v1.tflite",
         prefix_model = "{sample}.model",
         prefix_count = "{sample}.count"
-    container:
-        "docker://xiaoyuz/modbamutil:latest"
+    # container:
+    #     "docker://xiaoyuz/modbamutil:latest"
     shell:
         "aligned_bam_to_cpg_scores --bam {input} --output-prefix {params.prefix_model} --model {params.model} --threads {threads}; \
             aligned_bam_to_cpg_scores --bam {input} --output-prefix {params.prefix_count} --pileup-mode count --threads {threads}"
@@ -53,8 +53,8 @@ rule ggpairs_wgbs:
     output:
         bed = "HG002.wgbs.{sample}.methylC.CpG.bed",
         txt = "HG002.wgbs.{sample}.ggpairs.txt"
-    container:
-        "docker://xiaoyuz/biotools:latest"
+    # container:
+    #     "docker://xiaoyuz/biotools:latest"
     shell:
         """bedtools intersect -a {input.wgbs} -b {input.counts} -loj|cut -f1-5,9,10 | \
             bedtools intersect -a stdin -b {input.model} -loj |cut -f1-7,11,12 > {output.bed}"; \
@@ -65,7 +65,7 @@ rule ggpairs:
         "HG002.wgbs.{sample}.{ref}.ggpairs.txt"
     output:
         "methylation.{sample}.{ref}.ggpairs.pdf"
-    container:
-        "docker://xiaoyuz/ggplot:latest"
+    conda:
+        "envs/ggplot.yaml"
     script:
-        "methylation.ggpairs.r"
+        "scripts/methylation.ggpairs.r"
