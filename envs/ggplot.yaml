@@ -4,4 +4,4 @@ channels:
 dependencies:
   - r-ggally
   - r-rcolorbrewer
-  - dplyr
+  - r-dplyr
