@@ -36,7 +36,7 @@ rule pbCpGtools:
     threads:
         8
     params:
-        model = "/pb-CpG-tools-v2.2.0-x86_64-unknown-linux-gnu/models/pileup_calling_model.v1.tflite",
+        model = "/tmp/repo/pb-CpG-tools-v2.2.0-x86_64-unknown-linux-gnu/models/pileup_calling_model.v1.tflite",
         prefix_model = "{sample}.model",
         prefix_count = "{sample}.count"
     # container:
@@ -65,7 +65,7 @@ rule ggpairs:
         "HG002.wgbs.{sample}.{ref}.ggpairs.txt"
     output:
         "methylation.{sample}.{ref}.ggpairs.pdf"
-    conda:
-        "envs/ggplot.yaml"
+    # conda:
+    #     "envs/ggplot.yaml"
     script:
         "scripts/methylation.ggpairs.r"
