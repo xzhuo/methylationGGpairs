@@ -6,6 +6,9 @@ SAMPLES = set(map(lambda x: x[:-suffix_length], filter(lambda y: y.endswith(SUFF
 # SAMPLES = ["bam"]
 print(SAMPLES)
 
+REF = "/storage1/fs1/hprc/Active/xzhuo/ref/hg38.fa"
+WGBS = "/storage1/fs1/hprc/Active/xzhuo/pacbio_ggpairs/HG002.wgbs.methylC.CpG.bed"
+
 rule all:
     input:
         expand("methylation.{sample}.ggpairs.pdf", sample=SAMPLES),
@@ -13,7 +16,7 @@ rule all:
 rule pbmm2:
     input:
         bam = "{sample}.bam",
-        ref = "/storage1/fs1/hprc/Active/xzhuo/ref/hg38.fa"
+        ref = REF
     output:
         bam = "{sample}.hg38.bam",
         bai = "{sample}.hg38.bam.bai"
@@ -49,7 +52,7 @@ rule ggpairs_wgbs:
     input:
         model = "{sample}.model.combined.bed",
         counts = "{sample}.count.combined.bed",
-        wgbs = "HG002.wgbs.methylC.CpG.bed"
+        wgbs = WGBS
     output:
         bed = "HG002.wgbs.{sample}.methylC.CpG.bed",
         txt = "HG002.wgbs.{sample}.ggpairs.txt"
