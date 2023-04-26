@@ -39,7 +39,7 @@ rule pbCpGtools:
     threads:
         8
     params:
-        model = "/tmp/repo/pb-CpG-tools-v2.2.0-x86_64-unknown-linux-gnu/models/pileup_calling_model.v1.tflite",
+        model = "/opt/conda/pb-CpG-tools-v2.2.0-x86_64-unknown-linux-gnu/models/pileup_calling_model.v1.tflite",
         prefix_model = "{sample}.model",
         prefix_count = "{sample}.count"
     # container:
