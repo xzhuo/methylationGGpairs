@@ -16,4 +16,5 @@ bin2d_fn <- function(data, mapping, ...){
 }
 df_fig<-df[,c(4,5,6)]
 graph<-ggpairs(df_fig,lower=list(continuous=bin2d_fn))
-ggsave("methylation.ggpairs.pdf", plot = graph, width = 9, height = 9, units = "in")
+outfile<-gsub(".txt",".pdf",args[1])
+ggsave(outfile, plot = graph, width = 9, height = 9, units = "in")

@@ -56,16 +56,16 @@ rule ggpairs_wgbs:
     # container:
     #     "docker://xiaoyuz/biotools:latest"
     shell:
-        """bedtools intersect -a {input.wgbs} -b {input.counts} -loj|cut -f1-5,9,10 | \
-            bedtools intersect -a stdin -b {input.model} -loj |cut -f1-7,11,12 > {output.bed}"; \
-            perl -lane 'print join("\t",$F[0],$F[1],$F[2],$F[3],$F[5],$F[7]) if $F[4]>=5 && $F[6] >=5 && $F[8]>=5' {output.bed} > {output.txt}"""
+        """bedtools intersect -a {input.wgbs} -b {input.counts} -loj|cut -f1-5,9,11 | \
+            bedtools intersect -a stdin -b {input.model} -loj |cut -f1-7,11,13 > {output.bed}; \
+            perl -lane 'print join("\\t",$F[0],$F[1],$F[2],$F[3],$F[5],$F[7]) if $F[4]>=5 && $F[6] >=5 && $F[8]>=5' {output.bed} > {output.txt}"""
 
 rule ggpairs:
     input:
         "HG002.wgbs.{sample}.ggpairs.txt"
     output:
-        "methylation.{sample}.ggpairs.pdf"
+        "HG002.wgbs.{sample}.ggpairs.pdf"
     # conda:
     #     "envs/ggplot.yaml"
-    script:
-        "scripts/methylation.ggpairs.r"
+    shell:
+        "Rscript scripts/methylation.ggpairs.r {input}"
