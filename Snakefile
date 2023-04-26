@@ -22,13 +22,10 @@ rule pbmm2:
         bai = "{sample}.hg38.bam.bai"
     threads:
         8
-    params:
-        sort_threads = 2,
-        alignment_threads = 6
     # container:
     #     "docker://xiaoyuz/biotools:latest"
     shell:
-        "pbmm2 align {input.ref} {input.bam} {output.bam} --preset CCS --sort -j {params.alignment_threads} -J {params.sort_threads}"
+        "pbmm2 align {input.ref} {input.bam} {output.bam} --preset CCS --sort -j {threads} -m 2G"
 
 rule pbCpGtools:
     input:
@@ -65,9 +62,9 @@ rule ggpairs_wgbs:
 
 rule ggpairs:
     input:
-        "HG002.wgbs.{sample}.{ref}.ggpairs.txt"
+        "HG002.wgbs.{sample}.ggpairs.txt"
     output:
-        "methylation.{sample}.{ref}.ggpairs.pdf"
+        "methylation.{sample}.ggpairs.pdf"
     # conda:
     #     "envs/ggplot.yaml"
     script:
