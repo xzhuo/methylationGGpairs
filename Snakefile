@@ -53,6 +53,8 @@ rule ggpairs_wgbs:
     output:
         bed = "HG002.wgbs.{sample}.methylC.CpG.bed",
         txt = "HG002.wgbs.{sample}.ggpairs.txt"
+    threads:
+        4
     # container:
     #     "docker://xiaoyuz/biotools:latest"
     shell:
@@ -67,5 +69,5 @@ rule ggpairs:
         "HG002.wgbs.{sample}.ggpairs.pdf"
     # conda:
     #     "envs/ggplot.yaml"
-    shell:
-        "Rscript scripts/methylation.ggpairs.r {input}"
+    script:
+        "scripts/methylation.ggpairs.r"
