@@ -15,11 +15,11 @@ rule all:
 
 rule pbmm2:
     input:
-        bam = "{sample}.bam",
+        bam = "ubam/{sample}.bam",
         ref = REF
     output:
-        bam = "{sample}.hg38.bam",
-        bai = "{sample}.hg38.bam.bai"
+        bam = "hg38/{sample}.hg38.bam",
+        bai = "hg38/{sample}.hg38.bam.bai"
     threads:
         8
     # container:
@@ -29,16 +29,16 @@ rule pbmm2:
 
 rule pbCpGtools:
     input:
-        bam = "{sample}.hg38.bam"
+        bam = "hg38/{sample}.hg38.bam"
     output:
-        model = "{sample}.model.combined.bed",
-        counts = "{sample}.count.combined.bed"
+        model = "pbcpgtools/{sample}.model.combined.bed",
+        counts = "pbcpgtools/{sample}.count.combined.bed"
     threads:
         8
     params:
         model = "/opt/conda/pb-CpG-tools-v2.2.0-x86_64-unknown-linux-gnu/models/pileup_calling_model.v1.tflite",
-        prefix_model = "{sample}.model",
-        prefix_count = "{sample}.count"
+        prefix_model = "pbcpgtools/{sample}.model",
+        prefix_count = "pbcpgtools/{sample}.count"
     # container:
     #     "docker://xiaoyuz/modbamutil:latest"
     shell:
@@ -47,12 +47,12 @@ rule pbCpGtools:
 
 rule ggpairs_wgbs:
     input:
-        model = "{sample}.model.combined.bed",
-        counts = "{sample}.count.combined.bed",
+        model = "pbcpgtools/{sample}.model.combined.bed",
+        counts = "pbcpgtools/{sample}.count.combined.bed",
         wgbs = WGBS
     output:
-        bed = "HG002.wgbs.{sample}.methylC.CpG.bed",
-        txt = "HG002.wgbs.{sample}.ggpairs.txt"
+        bed = "ggpairs/HG002.wgbs.{sample}.methylC.CpG.bed",
+        txt = "ggpairs/HG002.wgbs.{sample}.ggpairs.txt"
     threads:
         4
     # container:
@@ -64,9 +64,9 @@ rule ggpairs_wgbs:
 
 rule ggpairs:
     input:
-        "HG002.wgbs.{sample}.ggpairs.txt"
+        "ggpairs/HG002.wgbs.{sample}.ggpairs.txt"
     output:
-        "HG002.wgbs.{sample}.ggpairs.pdf"
+        "ggpairs/HG002.wgbs.{sample}.ggpairs.pdf"
     # conda:
     #     "envs/ggplot.yaml"
     script:
