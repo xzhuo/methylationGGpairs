@@ -5,18 +5,14 @@ library("RColorBrewer")
 rf <- colorRampPalette(rev(brewer.pal(11,'Spectral')))
 r <- rf(32)
 
-ggpairs <- function(txt, pdf) {
-	df <- read.table(txt,col.names=c("chr","start","end","wgbs", "count","model"))
-	bin2d_fn <- function(data, mapping, ...){
-		p <- ggplot(data = data, mapping = mapping) + 
-			geom_bin2d(bins=25) +
-			scale_fill_gradientn(colors=r, trans="log10") + theme_bw()
-		p
-	}
-	df_fig<-df[,c(4,5,6)]
-	graph<-ggpairs(df_fig,lower=list(continuous=bin2d_fn))
-	# outfile<-gsub(".txt",".pdf",args[1])
-	ggsave(pdf, plot = graph, width = 9, height = 9, units = "in")
+df <- read.table(snakemake@input[[1]],col.names=c("chr","start","end","wgbs", "count","model"))
+bin2d_fn <- function(data, mapping, ...){
+    p <- ggplot(data = data, mapping = mapping) + 
+        geom_bin2d(bins=25) +
+        scale_fill_gradientn(colors=r, trans="log10") + theme_bw()
+    p
 }
-
-ggpairs(snakemake@input[[1]], snakemake@output[[1]])
+df_fig <- df[,c(4,5,6)]
+graph <- ggpairs(df_fig,lower=list(continuous=bin2d_fn))
+# outfile<-gsub(".txt",".pdf",args[1])
+ggsave(snakemake@output[[1]], plot = graph, width = 9, height = 9, units = "in")
