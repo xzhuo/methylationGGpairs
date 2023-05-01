@@ -70,4 +70,4 @@ rule ggpairs:
     # conda:
     #     "envs/ggplot.yaml"
     script:
-        "scripts/methylation.ggpairs.r"
+        "scripts/methylation.ggpairs.R"

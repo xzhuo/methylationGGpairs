@@ -2,17 +2,16 @@ library("ggplot2")
 library("dplyr")
 library("GGally")
 library("RColorBrewer")
-rf <- colorRampPalette(rev(brewer.pal(11,'Spectral')))
+rf <- colorRampPalette(rev(brewer.pal(11, "Spectral")))
 r <- rf(32)
-
-df <- read.table(snakemake@input[[1]],col.names=c("chr","start","end","wgbs", "count","model"))
-bin2d_fn <- function(data, mapping, ...){
-    p <- ggplot(data = data, mapping = mapping) + 
-        geom_bin2d(bins=25) +
-        scale_fill_gradientn(colors=r, trans="log10") + theme_bw()
+save.image(file = "test.ggpairs.rdata")
+df <- read.table(snakemake@input, col.names = c("chr", "start", "end", "wgbs", "count", "model"))
+bin2d_fn <- function(data, mapping, ...) {
+    p <- ggplot(data = data, mapping = mapping) +
+        geom_bin2d(bins = 25) +
+        scale_fill_gradientn(colors = r, trans = "log10") + theme_bw()
     p
 }
-df_fig <- df[,c(4,5,6)]
-graph <- ggpairs(df_fig,lower=list(continuous=bin2d_fn))
-# outfile<-gsub(".txt",".pdf",args[1])
-ggsave(snakemake@output[[1]], plot = graph, width = 9, height = 9, units = "in")
+df_fig <- df[, c(4, 5, 6)]
+graph <- ggpairs(df_fig, lower = list(continuous = bin2d_fn))
+ggsave(snakemake@output, plot = graph, width = 9, height = 9, units = "in")
