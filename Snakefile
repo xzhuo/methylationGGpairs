@@ -11,7 +11,8 @@ WGBS = "/storage1/fs1/hprc/Active/xzhuo/pacbio_ggpairs/HG002.wgbs.methylC.CpG.be
 
 rule all:
     input:
-        expand("HG002.wgbs.{sample}.ggpairs.pdf", sample=SAMPLES),
+        expand("ggpairs/HG002.wgbs.{sample}.ggpairs.pdf", sample=SAMPLES),
+        expand("ggpairs/HG002.wgbs.{sample}.ggpairs.txt", sample=SAMPLES)
 
 rule pbmm2:
     input:
