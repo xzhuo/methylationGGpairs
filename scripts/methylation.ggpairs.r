@@ -5,7 +5,6 @@ ggpairs_methyl <- function(txt, pdf) {
     library("RColorBrewer")
     rf <- colorRampPalette(rev(brewer.pal(11, "Spectral")))
     r <- rf(32)
-    save.image(file = "test.ggpairs.rdata")
     df <- read.table(txt, col.names = c("chr", "start", "end", "wgbs", "count", "model"))
     bin2d_fn <- function(data, mapping, ...) {
         p <- ggplot(data = data, mapping = mapping) +
