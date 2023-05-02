@@ -70,5 +70,7 @@ rule ggpairs:
         "ggpairs/HG002.wgbs.{sample}.ggpairs.pdf"
     # conda:
     #     "envs/ggplot.yaml"
+    threads:
+        4
     script:
         "scripts/methylation.ggpairs.R"
