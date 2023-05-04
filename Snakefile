@@ -26,7 +26,7 @@ rule pbmm2:
     # container:
     #     "docker://xiaoyuz/biotools:latest"
     shell:
-        "pbmm2 align {input.ref} {input.bam} {output.bam} --preset CCS --sort -j {threads} -m 2G"
+        "mkdir -p hg38;pbmm2 align {input.ref} {input.bam} {output.bam} --preset CCS --sort -j {threads} -m 2G"
 
 rule pbCpGtools:
     input:
@@ -43,7 +43,7 @@ rule pbCpGtools:
     # container:
     #     "docker://xiaoyuz/modbamutil:latest"
     shell:
-        "aligned_bam_to_cpg_scores --bam {input} --output-prefix {params.prefix_model} --model {params.model} --threads {threads}; \
+        "mkdir -p pbcpgtools;aligned_bam_to_cpg_scores --bam {input} --output-prefix {params.prefix_model} --model {params.model} --threads {threads}; \
             aligned_bam_to_cpg_scores --bam {input} --output-prefix {params.prefix_count} --pileup-mode count --threads {threads}"
 
 rule ggpairs_wgbs:
@@ -59,7 +59,7 @@ rule ggpairs_wgbs:
     # container:
     #     "docker://xiaoyuz/biotools:latest"
     shell:
-        """bedtools intersect -a {input.wgbs} -b {input.counts} -loj|cut -f1-5,9,11 | \
+        """mkdir -p ggpairs;bedtools intersect -a {input.wgbs} -b {input.counts} -loj|cut -f1-5,9,11 | \
             bedtools intersect -a stdin -b {input.model} -loj |cut -f1-7,11,13 > {output.bed}; \
             perl -lane 'print join("\\t",$F[0],$F[1],$F[2],$F[3],$F[5],$F[7]) if $F[4]>=5 && $F[6] >=5 && $F[8]>=5' {output.bed} > {output.txt}"""
 

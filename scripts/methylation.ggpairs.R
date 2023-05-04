@@ -13,7 +13,7 @@ ggpairs_methyl <- function(txt, pdf) {
         p
     }
     df_fig <- df[, c(4, 5, 6)]
-    graph <- ggpairs(df_fig, lower = list(continuous = bin2d_fn))
+    graph <- ggpairs(df_fig, lower = list(continuous = bin2d_fn)) + ggtitle(txt)
     ggsave(pdf, plot = graph, width = 9, height = 9, units = "in")
 }
 ggpairs_methyl(snakemake@input[[1]], snakemake@output[[1]])
