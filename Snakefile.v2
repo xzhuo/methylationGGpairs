@@ -1,0 +1,41 @@
+import os
+
+SAMPLES = ["HG00621", "HG01952"]
+PILEUP = ["model", "count"]
+METHODS = ["primrose","jasmine2", "Revio"]
+print(SAMPLES)
+
+REF = "/storage1/fs1/hprc/Active/xzhuo/ref/hg38.fa"
+WGBS = "/storage1/fs1/hprc/Active/xzhuo/pacbio_ggpairs/HG002.wgbs.methylC.CpG.bed"
+
+rule all:
+    input:
+        expand("{sample}.ggpairs.pdf", sample=SAMPLES),
+        expand("{sample}.ggpairs.txt", sample=SAMPLES)
+
+rule ggpairs_cat:
+    input:
+        hifi = expand("{sample}_{method}.hg38.{pileup}.bed",sample=SAMPLES,method=METHODS,pileup=PILEUP),
+        wgbs = "{sample}.wgbs.cpg.bed"
+    output:
+        bed = "{sample}.ggpairs.cpg.bed",
+    threads:
+        4
+    # container:
+    #     "docker://xiaoyuz/biotools:latest"
+    shell:
+        """
+            cut -f1,2,4,6 {input.hifi}) | cat - <(cut -f1,2,4,6 {input.wgbs}) |sort -k1,1 -k2,2n > {output.bed}
+        """
+
+rule ggpairs:
+    input:
+        "ggpairs/HG002.wgbs.{sample}.ggpairs.txt"
+    output:
+        "ggpairs/HG002.wgbs.{sample}.ggpairs.pdf"
+    # conda:
+    #     "envs/ggplot.yaml"
+    threads:
+        4
+    script:
+        "scripts/methylation.ggpairs.R"
